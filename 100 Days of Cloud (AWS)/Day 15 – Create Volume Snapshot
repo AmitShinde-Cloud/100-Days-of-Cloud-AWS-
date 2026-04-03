@@ -1,0 +1,166 @@
+# Day 15 – Create Volume Snapshot Using AWS Console
+
+---
+
+## 📌 What is an EBS Snapshot?
+
+An **Amazon EBS Snapshot** is a point-in-time backup of an EBS (Elastic Block Store) volume stored in **Amazon S3**. Snapshots are incremental — only the data that has changed since the last snapshot is saved, making them cost-efficient.
+
+---
+
+## 🎯 Use Cases
+
+- Backup and disaster recovery
+- Migrating volumes across Availability Zones or Regions
+- Creating AMIs (Amazon Machine Images)
+- Testing and development (clone production volumes)
+
+---
+
+## 🛠️ Prerequisites
+
+- An AWS account with appropriate IAM permissions (`ec2:CreateSnapshot`)
+- At least one existing EBS volume (attached or unattached)
+
+---
+
+## 🔢 Step-by-Step: Create a Volume Snapshot via AWS Console
+
+### Step 1: Sign in to AWS Console
+
+1. Go to [https://console.aws.amazon.com](https://console.aws.amazon.com)
+2. Sign in with your credentials.
+
+---
+
+### Step 2: Navigate to EC2 → Volumes
+
+1. In the **search bar**, type **EC2** and click on it.
+2. In the left sidebar, scroll down to **Elastic Block Store**.
+3. Click on **Volumes**.
+
+---
+
+### Step 3: Select Your Volume
+
+1. From the list, select the **EBS Volume** you want to snapshot.
+2. Note down the **Volume ID** (e.g., `vol-0abc1234def56789`).
+
+---
+
+### Step 4: Create Snapshot
+
+1. With the volume selected, click the **Actions** dropdown (top right).
+2. Choose **Create Snapshot**.
+
+---
+
+### Step 5: Fill in Snapshot Details
+
+| Field           | Description                                          |
+|----------------|------------------------------------------------------|
+| **Description** | Enter a meaningful name (e.g., `Day15-backup-vol`)  |
+| **Tags**        | (Optional) Add tags like `Name`, `Environment`, etc.|
+
+> 💡 **Tip:** Always add a descriptive name and tags for easy identification later.
+
+---
+
+### Step 6: Click "Create Snapshot"
+
+1. Click the **Create Snapshot** button.
+2. A success banner will appear with the **Snapshot ID** (e.g., `snap-0abc1234def56789`).
+
+---
+
+### Step 7: Monitor Snapshot Progress
+
+1. In the left sidebar, click **Snapshots** (under Elastic Block Store).
+2. Find your snapshot — the **State** column will show:
+   - `pending` → snapshot in progress
+   - `completed` → snapshot is ready to use
+
+---
+
+## 🏷️ Adding Tags to a Snapshot
+
+1. Go to **EC2 → Snapshots**.
+2. Select your snapshot.
+3. Click the **Tags** tab → **Manage Tags**.
+4. Add key-value pairs (e.g., `Name = Day15-snapshot`, `Project = AWS-30Days`).
+5. Click **Save Changes**.
+
+---
+
+## 📋 Key Concepts to Remember
+
+| Term              | Meaning                                                          |
+|-------------------|------------------------------------------------------------------|
+| **Incremental**   | Only changed blocks are stored after the first snapshot          |
+| **S3 Storage**    | Snapshots are stored in S3 (not visible in your S3 bucket)       |
+| **Cross-Region**  | Snapshots can be copied to another region for DR                 |
+| **Encryption**    | If the volume is encrypted, the snapshot is also encrypted       |
+| **AMI Creation**  | Snapshots of root volumes can be used to create AMIs             |
+
+---
+
+## 💡 Best Practices
+
+- 🔁 **Automate snapshots** using **AWS Data Lifecycle Manager (DLM)** for scheduled backups.
+- 🔐 **Enable encryption** on your volumes to auto-encrypt snapshots.
+- 🏷️ **Always tag** snapshots with date, environment, and project.
+- 🗑️ **Delete old snapshots** regularly to reduce storage costs.
+- 🌍 **Copy snapshots** to another region for disaster recovery.
+
+---
+
+## 🔁 Restore Volume from Snapshot
+
+1. Go to **EC2 → Snapshots**.
+2. Select the snapshot.
+3. Click **Actions → Create Volume from Snapshot**.
+4. Choose:
+   - **Volume Type** (gp3, io1, etc.)
+   - **Availability Zone**
+   - **Size** (must be ≥ original)
+5. Click **Create Volume**.
+
+---
+
+## 🌍 Copy Snapshot to Another Region
+
+1. Go to **EC2 → Snapshots**.
+2. Select your snapshot.
+3. Click **Actions → Copy Snapshot**.
+4. Choose the **Destination Region**.
+5. (Optional) Enable **Encryption**.
+6. Click **Copy Snapshot**.
+
+---
+
+## 🤖 AWS Data Lifecycle Manager (DLM) – Automate Snapshots
+
+1. Go to **EC2 → Lifecycle Manager** (under Elastic Block Store).
+2. Click **Create Lifecycle Policy**.
+3. Choose **EBS Snapshot Policy**.
+4. Set:
+   - **Target resources** (by tag)
+   - **Schedule** (e.g., daily at 12:00 AM UTC)
+   - **Retention** (e.g., keep last 7 snapshots)
+5. Click **Create Policy**.
+
+---
+
+## 📌 Summary
+
+| Action                   | Location in Console                            |
+|--------------------------|------------------------------------------------|
+| Create Snapshot          | EC2 → Volumes → Actions → Create Snapshot      |
+| View Snapshots           | EC2 → Snapshots                                |
+| Copy to Another Region   | EC2 → Snapshots → Actions → Copy Snapshot      |
+| Restore Volume           | EC2 → Snapshots → Actions → Create Volume      |
+| Automate Snapshots       | EC2 → Lifecycle Manager → Create Policy        |
+
+---
+
+> ✅ **Day 15 Complete!** You now know how to create, manage, restore, and automate EBS Volume Snapshots using the AWS Console.
